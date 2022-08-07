@@ -35,14 +35,15 @@ contract MemeBookPosts {
     } 
 
     event PostEvent(
+        uint256 poIndex ,
         PTypeEnum pTypeEnum ,
         address indexed _from ,
         PostContent postContent 
     ) ;
 
     function po(PostContent memory p)  external returns(bool) {
-        emit PostEvent(PTypeEnum.PUREPOST ,msg.sender ,p) ;
         poIndex += 1 ;
+        emit PostEvent(poIndex ,PTypeEnum.PUREPOST ,msg.sender ,p) ;
         return true ;
     }
 
@@ -53,8 +54,8 @@ contract MemeBookPosts {
 
     function poWithAirDrop(PostContent memory p) external returns(bool) {
         IERC20(p.airDropInfo.erc20Addr).transferFrom(msg.sender, address(this), p.airDropInfo.amountPerShare * p.airDropInfo.share);
-        emit PostEvent(PTypeEnum.POSTWITHAIRDROP ,msg.sender ,p) ;
         poIndex += 1 ;
+        emit PostEvent(poIndex ,PTypeEnum.POSTWITHAIRDROP ,msg.sender ,p) ;
         poAirDropMap[poIndex] = p.airDropInfo ;
         return true ;
     }
