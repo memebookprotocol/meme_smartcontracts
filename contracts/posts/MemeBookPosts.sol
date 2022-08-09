@@ -25,11 +25,10 @@ contract MemeBookPosts {
         uint256 share;
         uint256 amountPerShare;
         address erc20Addr;
-        string passwordSha3 ;
+        bytes32 passwordkeccak256 ;
     }
     struct PostContent {
         string text;
-        string[] urlPics ;
         bytes32[] ipfsPics ;
         AirDropInfo airDropInfo ;
     } 
@@ -42,29 +41,29 @@ contract MemeBookPosts {
     ) ;
 
     function po(PostContent memory p)  external returns(bool) {
-        poIndex += 1 ;
-        emit PostEvent(poIndex ,PTypeEnum.PUREPOST ,msg.sender ,p) ;
+        poIndexGlb += 1 ;
+        emit PostEvent(poIndexGlb ,PTypeEnum.PUREPOST ,msg.sender ,p) ;
         return true ;
     }
 
-    uint256 poIndex = 0 ;
+    uint256 poIndexGlb = 0 ;
     mapping (uint256 => AirDropInfo) poAirDropMap ;
     mapping (uint256 => mapping(address => bool)) poAirDropClaimAddrMap ;
     mapping (uint256 => uint256) poAirDropClaimCount ;
 
     function poWithAirDrop(PostContent memory p) external returns(bool) {
         IERC20(p.airDropInfo.erc20Addr).transferFrom(msg.sender, address(this), p.airDropInfo.amountPerShare * p.airDropInfo.share);
-        poIndex += 1 ;
-        emit PostEvent(poIndex ,PTypeEnum.POSTWITHAIRDROP ,msg.sender ,p) ;
-        poAirDropMap[poIndex] = p.airDropInfo ;
+        poIndexGlb += 1 ;
+        emit PostEvent(poIndexGlb ,PTypeEnum.POSTWITHAIRDROP ,msg.sender ,p) ;
+        poAirDropMap[poIndexGlb] = p.airDropInfo ;
         return true ;
     }
 
     function claimAirDrop(uint256 poIndex,string memory originPassword) external returns(bool) {
-        AirDropInfo poAirDrop = poAirDropMap[poIndex] ; 
-        required(poAirDropClaimCount[poIndex] < poAirDrop.share,"claim is over" ) ;
-        required(sha3(originPassword)!=poAirDrop.passwordSha3,"password verify fail") ;
-        required(poAirDropClaimAddrMap[poIndex][msg.sender] == 0,"u already claim") ;
+        AirDropInfo memory poAirDrop = poAirDropMap[poIndex] ; 
+        require(poAirDropClaimCount[poIndex] < poAirDrop.share,"claim is over" ) ;
+        require(keccak256(abi.encodePacked(originPassword))!=poAirDrop.passwordkeccak256,"password verify fail") ;
+        require(poAirDropClaimAddrMap[poIndex][msg.sender] != true,"u already claim") ;
         IERC20(poAirDrop.erc20Addr).transferFrom(address(this),msg.sender ,poAirDrop.amountPerShare);
         poAirDropClaimCount[poIndex] += 1 ;
         poAirDropClaimAddrMap[poIndex][msg.sender] = true ;

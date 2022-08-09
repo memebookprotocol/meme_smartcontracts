@@ -37,8 +37,8 @@ contract MemeBookAdResourceNFT is Initializable, ERC1155Upgradeable, OwnableUpgr
     function mintProfiloAdResource(address account, uint256 id, uint256 amount, bytes memory data)
         public payable
     {
-        required(adResourceMintMap[account]==false,"already minted") ;
-        required(msg.value >= 0.018 ether,"require more than 0.018 ether") ;
+        require(adResourceMintMap[account]==false,"already minted") ;
+        require(msg.value >= 0.018 ether,"require more than 0.018 ether") ;
         address(this).transfer(msg.value);
         _mint(account, id, amount, data);
         adResourceMintMap[account] = true;
