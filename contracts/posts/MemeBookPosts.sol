@@ -19,6 +19,17 @@ interface IERC20 {
     external returns (bool);
 }
 
+library SafeMath {
+    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
+        if (a == 0) {
+            return 0;
+        }
+        uint256 c = a * b;
+        require(c / a == b, "SafeMath: multiplication overflow");
+        return c;
+    }
+}
+
 contract MemeBookPosts {
     enum PTypeEnum{PUREPOST , POSTWITHAIRDROP  } 
     struct AirDropInfo {
@@ -27,22 +38,27 @@ contract MemeBookPosts {
         address erc20Addr;
         bytes32 passwordkeccak256 ;
     }
-    struct PostContent {
-        string text;
-        bytes32[] ipfsPics ;
-        AirDropInfo airDropInfo ;
-    } 
 
     event PostEvent(
         uint256 poIndex ,
         PTypeEnum pTypeEnum ,
         address indexed _from ,
-        PostContent postContent 
+        string text ,
+        bytes32[] ipfsPics 
     ) ;
 
-    function po(PostContent memory p)  external returns(bool) {
+    event PostEvent(
+        uint256 poIndex ,
+        PTypeEnum pTypeEnum ,
+        address indexed _from ,
+        string text ,
+        bytes32[] ipfsPics ,
+        AirDropInfo airDropInfo
+    ) ;
+
+    function po(string memory text,bytes32[] memory ipfsPics)  external returns(bool) {
         poIndexGlb += 1 ;
-        emit PostEvent(poIndexGlb ,PTypeEnum.PUREPOST ,msg.sender ,p) ;
+        emit PostEvent(poIndexGlb ,PTypeEnum.PUREPOST ,msg.sender ,text,ipfsPics) ;
         return true ;
     }
 
@@ -51,11 +67,12 @@ contract MemeBookPosts {
     mapping (uint256 => mapping(address => bool)) poAirDropClaimAddrMap ;
     mapping (uint256 => uint256) poAirDropClaimCount ;
 
-    function poWithAirDrop(PostContent memory p) external returns(bool) {
-        IERC20(p.airDropInfo.erc20Addr).transferFrom(msg.sender, address(this), p.airDropInfo.amountPerShare * p.airDropInfo.share);
+    function poWithAirDrop(string memory text,bytes32[] memory ipfsPics
+        , uint256 share ,uint256 amountPerShare , address erc20Addr ,bytes32 passwordkeccak256 ) external returns(bool) {
+        IERC20(erc20Addr).transferFrom(msg.sender, address(this), SafeMath.mul(amountPerShare , share));
         poIndexGlb += 1 ;
-        emit PostEvent(poIndexGlb ,PTypeEnum.POSTWITHAIRDROP ,msg.sender ,p) ;
-        poAirDropMap[poIndexGlb] = p.airDropInfo ;
+        emit PostEvent(poIndexGlb ,PTypeEnum.POSTWITHAIRDROP ,msg.sender ,text,ipfsPics ,AirDropInfo(share,amountPerShare,erc20Addr,passwordkeccak256)) ;
+        poAirDropMap[poIndexGlb] = AirDropInfo(share,amountPerShare,erc20Addr,passwordkeccak256) ;
         return true ;
     }
 
