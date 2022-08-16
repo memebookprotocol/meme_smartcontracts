@@ -56,6 +56,11 @@ contract MemeBookPosts {
         AirDropInfo airDropInfo
     ) ;
 
+    event ClaimEvent(
+        uint256 poIndex ,
+        address toAddr 
+    ) ;
+
     function po(string memory text,bytes32[] memory ipfsPics)  external returns(bool) {
         poIndexGlb += 1 ;
         emit PostEvent(poIndexGlb ,PTypeEnum.PUREPOST ,msg.sender ,text,ipfsPics) ;
@@ -82,6 +87,7 @@ contract MemeBookPosts {
         require(keccak256(abi.encodePacked(originPassword))!=poAirDrop.passwordkeccak256,"password verify fail") ;
         require(poAirDropClaimAddrMap[poIndex][msg.sender] != true,"u already claim") ;
         IERC20(poAirDrop.erc20Addr).transferFrom(address(this),msg.sender ,poAirDrop.amountPerShare);
+        emit ClaimEvent(poIndex,msg.sender) ;
         poAirDropClaimCount[poIndex] += 1 ;
         poAirDropClaimAddrMap[poIndex][msg.sender] = true ;
         return true ;
