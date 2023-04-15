@@ -1,28 +1,28 @@
 /**                                
-                             :^~!77!^:                           
-                          ^?J?!~^^^^!7??^                        
-                        .JJ^      .~!!~~?Y^.~???.                
-                       .P!       75~^~7J7:5G!: YY.:^.            
-                      .5J       .B^:G#Y:YJ ?Y:~5P?7!P!           
-                     .G@^ .!?7:  57.B@@Y.B~.GY!:    G7           
-                     ^#B^ :BBGG. .57:YP!.G~.:     .57            
-                     .BB7  7PY!   .?Y7~!Y?       ^P!:!.          
-                      J#G   ..      .^~^.       ~B5JJB! ^75^     
-                       !B7                   .:^Y#?!~PPYYJ#:     
-                        :B:                  .!!!?7!!!7!!G!      
-                         75             ^~~~~~!!!!!!!!~7G!       
-                          JJ       ... ^!!!!!!!!!!!!!!YP^        
-                           Y?     ~!!!~!!!!!!!!!!!!!JP?.         
-                            JJ:::^!!!!!!!!!!!!!!!7J5?:           
-                             !5J!!!!!!!!!!!!!7?YY?~.             
-                              .JYJ??77777??YYY#J                 
-                                .^~7????JGY::?PP                 
-                                       .7PY   !:                 
-                                         :.       
-                   website: https://www.memebook.xyz/home
-                   twitter: https://twitter.com/memebook_xyz
-                   whitepapper_en: https://whitepaper.memebook.xyz/en/
-                   whitepapper_zh: https://whitepaper.memebook.xyz/zh/
+                              :^~!77!^:                           
+                           ^?J?!~^^^^!7??^                        
+                         .JJ^      .~!!~~?Y^.~???.                
+                        .P!       75~^~7J7:5G!: YY.:^.            
+                       .5J       .B^:G#Y:YJ ?Y:~5P?7!P!           
+                      .G@^ .!?7:  57.B@@Y.B~.GY!:    G7           
+                      ^#B^ :BBGG. .57:YP!.G~.:     .57            
+                      .BB7  7PY!   .?Y7~!Y?       ^P!:!.          
+                       J#G   ..      .^~^.       ~B5JJB! ^75^     
+                        !B7                   .:^Y#?!~PPYYJ#:     
+                         :B:                  .!!!?7!!!7!!G!      
+                          75             ^~~~~~!!!!!!!!~7G!       
+                           JJ       ... ^!!!!!!!!!!!!!!YP^        
+                            Y?     ~!!!~!!!!!!!!!!!!!JP?.         
+                             JJ:::^!!!!!!!!!!!!!!!7J5?:           
+                              !5J!!!!!!!!!!!!!7?YY?~.             
+                               .JYJ??77777??YYY#J                 
+                                 .^~7????JGY::?PP                 
+                                        .7PY   !:                 
+                                          :.       
+                    website: https://www.memebook.xyz/home
+                    twitter: https://twitter.com/memebook_xyz
+                    whitepapper_en: https://whitepaper.memebook.xyz/en/
+                    whitepapper_zh: https://whitepaper.memebook.xyz/zh/
  */
 
 // SPDX-License-Identifier: MIT
@@ -37,17 +37,8 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol";
-import "./PercentageMath.sol";
 
-error MaxSupply();
-error ExceedLimit();
-error ExistPartner();
-error NoHatchingYet();
-error IllegalCaller();
-error IllegalParameter();
-error MintPriceNotPaid();
-error WithdrawTransfer();
-error SelfBind();
+import "./PercentageMath.sol";
 
 contract MemePigeonNFT is
     Initializable,
@@ -87,11 +78,11 @@ contract MemePigeonNFT is
     address public feeto;
     address public hatchingNest;
     bool public startHatching;
-    address public linkageNft;
-    uint256 public discount;
 
     mapping(uint256 => Pigeon) public pigeons;
     mapping(address => address) public partners;
+    address public linkageNft;
+    uint256 public discount;
 
     event BindingPartner(address indexed customer, address indexed partner);
     event ShareReward(
@@ -111,12 +102,8 @@ contract MemePigeonNFT is
     event SetLinkageNft(address linkage, uint256 discount);
 
     modifier onlyHatchingNest() {
-        if (!startHatching || hatchingNest == address(0)) {
-            revert NoHatchingYet();
-        }
-        if (msg.sender != hatchingNest) {
-            revert IllegalCaller();
-        }
+        require(startHatching && hatchingNest == address(0), "NoHatchingYet");
+        require(msg.sender == hatchingNest, "IllegalCaller");
         _;
     }
 
@@ -212,32 +199,27 @@ contract MemePigeonNFT is
         uint256 amount,
         address newPartner
     ) public payable nonReentrant {
-        if (id < 1 || id > 5) {
-            revert IllegalParameter();
-        }
-        if (totalSupply(id) + amount > getMaxPigeon(id)) {
-            revert MaxSupply();
-        }
-        if (
-            pigeons[id].limit > 0 &&
-            balanceOf(account, id) + amount > pigeons[id].limit
-        ) {
-            revert ExceedLimit();
-        }
+        require(id > 0 && id <= 5, "IllegalParameterId");
+        require(
+            totalSupply(id) + amount <= getMaxPigeon(id),
+            "MoreThanGroupMax"
+        );
 
-        uint256 payment = amount * getMintPrice(id);
-        if (msg.value < payment) {
-            revert MintPriceNotPaid();
+        if (pigeons[id].limit != 0) {
+            require(
+                balanceOf(account, id) + amount <= pigeons[id].limit,
+                "MoreThanLimitMax"
+            );
         }
+        uint256 payment = amount * getMintPrice(id);
+        require(msg.value >= payment, "MintPriceNotPaid");
 
         address currentPartner = partners[account];
-        if (newPartner != currentPartner) {
-            if (currentPartner != address(0)) {
-                revert ExistPartner();
-            }
-            if (newPartner == tx.origin || newPartner == msg.sender) {
-                revert SelfBind();
-            }
+        if (newPartner != currentPartner && newPartner != address(0)) {
+            require(
+                newPartner != tx.origin && newPartner != msg.sender,
+                "SelfBind"
+            );
             if (tx.origin == account) {
                 partners[account] = newPartner;
                 currentPartner = newPartner;
@@ -248,9 +230,7 @@ contract MemePigeonNFT is
         if (currentPartner != address(0)) {
             uint256 reward = payment.percentMul(partnerMintReward);
             (bool sent, ) = currentPartner.call{value: reward}(new bytes(0));
-            if (!sent) {
-                revert WithdrawTransfer();
-            }
+            require(sent, "WithdrawTransfer");
             emit ShareReward(account, currentPartner, reward);
         }
 
@@ -263,32 +243,25 @@ contract MemePigeonNFT is
         uint256[] memory ids,
         uint256[] memory amounts
     ) external onlyHatchingNest returns (bool) {
-        if (ids.length != amounts.length) {
-            revert IllegalParameter();
-        }
+        require(ids.length == amounts.length, "IllegalParameterLength");
         for (uint256 i = 0; i < ids.length; ++i) {
-            if (ids[i] < 1 || ids[i] > 5) {
-                revert IllegalParameter();
-            }
+            require(ids[i] > 0 && ids[i] <= 5, "IllegalParameterId");
         }
-
         _mintBatch(account, ids, amounts, new bytes(0));
         return true;
     }
 
     function bindPartner(address newPartner) public {
-        if (partners[msg.sender] != address(0)) {
-            revert ExistPartner();
-        }
-        if (newPartner == tx.origin || newPartner == msg.sender) {
-            revert SelfBind();
-        }
+        require(partners[msg.sender] == address(0), "ExistPartner");
+        require(
+            newPartner != tx.origin && newPartner != msg.sender,
+            "SelfBind"
+        );
         partners[msg.sender] = newPartner;
         emit BindingPartner(msg.sender, newPartner);
     }
 
     // ================== onlyOwner ==============================
-
     function setHatchingStart(bool flag, address _hatching) external onlyOwner {
         startHatching = flag;
         hatchingNest = _hatching;
@@ -308,12 +281,11 @@ contract MemePigeonNFT is
         uint256[] memory mintPrice,
         uint256[] memory promotionalPrice
     ) external onlyOwner {
-        if (
-            ids.length != mintPrice.length ||
-            ids.length != promotionalPrice.length
-        ) {
-            revert IllegalParameter();
-        }
+        require(
+            ids.length == mintPrice.length &&
+                ids.length == promotionalPrice.length,
+            "IllegalParameterLength"
+        );
         for (uint i = 0; i < ids.length; ++i) {
             Pigeon memory pigeon = pigeons[ids[i]];
             pigeon.mintPrice = mintPrice[i];
@@ -328,9 +300,10 @@ contract MemePigeonNFT is
         uint256[] memory efficiency,
         uint256[] memory caps
     ) public onlyOwner {
-        if (ids.length != efficiency.length || ids.length != caps.length) {
-            revert IllegalParameter();
-        }
+        require(
+            ids.length == efficiency.length && ids.length == caps.length,
+            "IllegalParameterLength"
+        );
         for (uint i = 0; i < ids.length; ++i) {
             Pigeon memory pigeon = pigeons[ids[i]];
             pigeon.efficiency = efficiency[i];
@@ -353,22 +326,12 @@ contract MemePigeonNFT is
         emit SetLinkageNft(newLinkage, newDiscount);
     }
 
-    function withdrawPayments(address payable payee) external onlyOwner {
-        uint256 balance = address(this).balance;
-        (bool transferTx, ) = payee.call{value: balance}(new bytes(0));
-        if (!transferTx) {
-            revert WithdrawTransfer();
-        }
-    }
-
-    function revokeWrongToken(address token_) external onlyOwner {
+    function withdrawPayments(address token_) external onlyOwner {
         if (token_ == address(0x0)) {
             (bool sent, ) = msg.sender.call{value: address(this).balance}(
                 new bytes(0)
             );
-            if (!sent) {
-                revert WithdrawTransfer();
-            }
+            require(sent, "WithdrawFail");
             return;
         }
         IERC20Upgradeable token = IERC20Upgradeable(token_);
@@ -384,7 +347,7 @@ contract MemePigeonNFT is
     }
 
     function symbol() public pure returns (string memory) {
-        return "MPF";
+        return "MPN";
     }
 
     function current() public view returns (uint256) {
@@ -458,7 +421,10 @@ contract MemePigeonNFT is
     }
 
     function getMaxPigeon(uint256 id) public view returns (uint256) {
-        return pigeons[id].groupSize;
+        return
+            pigeons[id].groupSize > 0
+                ? pigeons[id].groupSize
+                : type(uint256).max;
     }
 
     function _authorizeUpgrade(
@@ -466,7 +432,6 @@ contract MemePigeonNFT is
     ) internal override onlyOwner {}
 
     // The following functions are overrides required by Solidity.
-
     function _beforeTokenTransfer(
         address operator,
         address from,
@@ -489,8 +454,6 @@ contract MemePigeonNFT is
             Pigeon memory
         )
     {
-        // return (pigeons[1], pigeons[2], pigeons[3], pigeons[4], pigeons[5]);
-        // Ordinary Rare Legend Epic Myth
         return (
             pigeons[uint256(Rarity.Myth)],
             pigeons[uint256(Rarity.Epic)],
