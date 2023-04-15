@@ -66,7 +66,6 @@ library PercentageMath {
     }
 }
 
-
 /**
  * @dev Standard math utilities missing in the Solidity language.
  */
@@ -255,10 +254,15 @@ library MathUpgradeable {
     /**
      * @notice Calculates sqrt(a), following the selected rounding direction.
      */
-    function sqrt(uint256 a, Rounding rounding) internal pure returns (uint256) {
+    function sqrt(
+        uint256 a,
+        Rounding rounding
+    ) internal pure returns (uint256) {
         unchecked {
             uint256 result = sqrt(a);
-            return result + (rounding == Rounding.Up && result * result < a ? 1 : 0);
+            return
+                result +
+                (rounding == Rounding.Up && result * result < a ? 1 : 0);
         }
     }
 
@@ -308,10 +312,15 @@ library MathUpgradeable {
      * @dev Return the log in base 2, following the selected rounding direction, of a positive value.
      * Returns 0 if given 0.
      */
-    function log2(uint256 value, Rounding rounding) internal pure returns (uint256) {
+    function log2(
+        uint256 value,
+        Rounding rounding
+    ) internal pure returns (uint256) {
         unchecked {
             uint256 result = log2(value);
-            return result + (rounding == Rounding.Up && 1 << result < value ? 1 : 0);
+            return
+                result +
+                (rounding == Rounding.Up && 1 << result < value ? 1 : 0);
         }
     }
 
@@ -322,31 +331,31 @@ library MathUpgradeable {
     function log10(uint256 value) internal pure returns (uint256) {
         uint256 result = 0;
         unchecked {
-            if (value >= 10**64) {
-                value /= 10**64;
+            if (value >= 10 ** 64) {
+                value /= 10 ** 64;
                 result += 64;
             }
-            if (value >= 10**32) {
-                value /= 10**32;
+            if (value >= 10 ** 32) {
+                value /= 10 ** 32;
                 result += 32;
             }
-            if (value >= 10**16) {
-                value /= 10**16;
+            if (value >= 10 ** 16) {
+                value /= 10 ** 16;
                 result += 16;
             }
-            if (value >= 10**8) {
-                value /= 10**8;
+            if (value >= 10 ** 8) {
+                value /= 10 ** 8;
                 result += 8;
             }
-            if (value >= 10**4) {
-                value /= 10**4;
+            if (value >= 10 ** 4) {
+                value /= 10 ** 4;
                 result += 4;
             }
-            if (value >= 10**2) {
-                value /= 10**2;
+            if (value >= 10 ** 2) {
+                value /= 10 ** 2;
                 result += 2;
             }
-            if (value >= 10**1) {
+            if (value >= 10 ** 1) {
                 result += 1;
             }
         }
@@ -357,10 +366,15 @@ library MathUpgradeable {
      * @dev Return the log in base 10, following the selected rounding direction, of a positive value.
      * Returns 0 if given 0.
      */
-    function log10(uint256 value, Rounding rounding) internal pure returns (uint256) {
+    function log10(
+        uint256 value,
+        Rounding rounding
+    ) internal pure returns (uint256) {
         unchecked {
             uint256 result = log10(value);
-            return result + (rounding == Rounding.Up && 10**result < value ? 1 : 0);
+            return
+                result +
+                (rounding == Rounding.Up && 10 ** result < value ? 1 : 0);
         }
     }
 
@@ -400,10 +414,15 @@ library MathUpgradeable {
      * @dev Return the log in base 10, following the selected rounding direction, of a positive value.
      * Returns 0 if given 0.
      */
-    function log256(uint256 value, Rounding rounding) internal pure returns (uint256) {
+    function log256(
+        uint256 value,
+        Rounding rounding
+    ) internal pure returns (uint256) {
         unchecked {
             uint256 result = log256(value);
-            return result + (rounding == Rounding.Up && 1 << (result * 8) < value ? 1 : 0);
+            return
+                result +
+                (rounding == Rounding.Up && 1 << (result * 8) < value ? 1 : 0);
         }
     }
 }
@@ -452,7 +471,10 @@ library StringsUpgradeable {
     /**
      * @dev Converts a `uint256` to its ASCII `string` hexadecimal representation with fixed length.
      */
-    function toHexString(uint256 value, uint256 length) internal pure returns (string memory) {
+    function toHexString(
+        uint256 value,
+        uint256 length
+    ) internal pure returns (string memory) {
         bytes memory buffer = new bytes(2 * length + 2);
         buffer[0] = "0";
         buffer[1] = "x";
@@ -520,7 +542,9 @@ library StorageSlotUpgradeable {
     /**
      * @dev Returns an `AddressSlot` with member `value` located at `slot`.
      */
-    function getAddressSlot(bytes32 slot) internal pure returns (AddressSlot storage r) {
+    function getAddressSlot(
+        bytes32 slot
+    ) internal pure returns (AddressSlot storage r) {
         /// @solidity memory-safe-assembly
         assembly {
             r.slot := slot
@@ -530,7 +554,9 @@ library StorageSlotUpgradeable {
     /**
      * @dev Returns an `BooleanSlot` with member `value` located at `slot`.
      */
-    function getBooleanSlot(bytes32 slot) internal pure returns (BooleanSlot storage r) {
+    function getBooleanSlot(
+        bytes32 slot
+    ) internal pure returns (BooleanSlot storage r) {
         /// @solidity memory-safe-assembly
         assembly {
             r.slot := slot
@@ -540,7 +566,9 @@ library StorageSlotUpgradeable {
     /**
      * @dev Returns an `Bytes32Slot` with member `value` located at `slot`.
      */
-    function getBytes32Slot(bytes32 slot) internal pure returns (Bytes32Slot storage r) {
+    function getBytes32Slot(
+        bytes32 slot
+    ) internal pure returns (Bytes32Slot storage r) {
         /// @solidity memory-safe-assembly
         assembly {
             r.slot := slot
@@ -550,7 +578,9 @@ library StorageSlotUpgradeable {
     /**
      * @dev Returns an `Uint256Slot` with member `value` located at `slot`.
      */
-    function getUint256Slot(bytes32 slot) internal pure returns (Uint256Slot storage r) {
+    function getUint256Slot(
+        bytes32 slot
+    ) internal pure returns (Uint256Slot storage r) {
         /// @solidity memory-safe-assembly
         assembly {
             r.slot := slot
@@ -604,7 +634,11 @@ interface IERC20Upgradeable {
      * @dev Emitted when the allowance of a `spender` for an `owner` is set by
      * a call to {approve}. `value` is the new allowance.
      */
-    event Approval(address indexed owner, address indexed spender, uint256 value);
+    event Approval(
+        address indexed owner,
+        address indexed spender,
+        uint256 value
+    );
 
     /**
      * @dev Returns the amount of tokens in existence.
@@ -632,7 +666,10 @@ interface IERC20Upgradeable {
      *
      * This value changes when {approve} or {transferFrom} are called.
      */
-    function allowance(address owner, address spender) external view returns (uint256);
+    function allowance(
+        address owner,
+        address spender
+    ) external view returns (uint256);
 
     /**
      * @dev Sets `amount` as the allowance of `spender` over the caller's tokens.
@@ -721,10 +758,16 @@ library AddressUpgradeable {
      * https://solidity.readthedocs.io/en/v0.5.11/security-considerations.html#use-the-checks-effects-interactions-pattern[checks-effects-interactions pattern].
      */
     function sendValue(address payable recipient, uint256 amount) internal {
-        require(address(this).balance >= amount, "Address: insufficient balance");
+        require(
+            address(this).balance >= amount,
+            "Address: insufficient balance"
+        );
 
         (bool success, ) = recipient.call{value: amount}("");
-        require(success, "Address: unable to send value, recipient may have reverted");
+        require(
+            success,
+            "Address: unable to send value, recipient may have reverted"
+        );
     }
 
     /**
@@ -745,8 +788,17 @@ library AddressUpgradeable {
      *
      * _Available since v3.1._
      */
-    function functionCall(address target, bytes memory data) internal returns (bytes memory) {
-        return functionCallWithValue(target, data, 0, "Address: low-level call failed");
+    function functionCall(
+        address target,
+        bytes memory data
+    ) internal returns (bytes memory) {
+        return
+            functionCallWithValue(
+                target,
+                data,
+                0,
+                "Address: low-level call failed"
+            );
     }
 
     /**
@@ -779,7 +831,13 @@ library AddressUpgradeable {
         bytes memory data,
         uint256 value
     ) internal returns (bytes memory) {
-        return functionCallWithValue(target, data, value, "Address: low-level call with value failed");
+        return
+            functionCallWithValue(
+                target,
+                data,
+                value,
+                "Address: low-level call with value failed"
+            );
     }
 
     /**
@@ -794,9 +852,20 @@ library AddressUpgradeable {
         uint256 value,
         string memory errorMessage
     ) internal returns (bytes memory) {
-        require(address(this).balance >= value, "Address: insufficient balance for call");
-        (bool success, bytes memory returndata) = target.call{value: value}(data);
-        return verifyCallResultFromTarget(target, success, returndata, errorMessage);
+        require(
+            address(this).balance >= value,
+            "Address: insufficient balance for call"
+        );
+        (bool success, bytes memory returndata) = target.call{value: value}(
+            data
+        );
+        return
+            verifyCallResultFromTarget(
+                target,
+                success,
+                returndata,
+                errorMessage
+            );
     }
 
     /**
@@ -805,8 +874,16 @@ library AddressUpgradeable {
      *
      * _Available since v3.3._
      */
-    function functionStaticCall(address target, bytes memory data) internal view returns (bytes memory) {
-        return functionStaticCall(target, data, "Address: low-level static call failed");
+    function functionStaticCall(
+        address target,
+        bytes memory data
+    ) internal view returns (bytes memory) {
+        return
+            functionStaticCall(
+                target,
+                data,
+                "Address: low-level static call failed"
+            );
     }
 
     /**
@@ -821,7 +898,13 @@ library AddressUpgradeable {
         string memory errorMessage
     ) internal view returns (bytes memory) {
         (bool success, bytes memory returndata) = target.staticcall(data);
-        return verifyCallResultFromTarget(target, success, returndata, errorMessage);
+        return
+            verifyCallResultFromTarget(
+                target,
+                success,
+                returndata,
+                errorMessage
+            );
     }
 
     /**
@@ -866,7 +949,10 @@ library AddressUpgradeable {
         }
     }
 
-    function _revert(bytes memory returndata, string memory errorMessage) private pure {
+    function _revert(
+        bytes memory returndata,
+        string memory errorMessage
+    ) private pure {
         // Look for revert reason and bubble it up if present
         if (returndata.length > 0) {
             // The easiest way to bubble the revert reason is using memory via assembly
@@ -959,7 +1045,9 @@ abstract contract Initializable {
     modifier initializer() {
         bool isTopLevelCall = !_initializing;
         require(
-            (isTopLevelCall && _initialized < 1) || (!AddressUpgradeable.isContract(address(this)) && _initialized == 1),
+            (isTopLevelCall && _initialized < 1) ||
+                (!AddressUpgradeable.isContract(address(this)) &&
+                    _initialized == 1),
             "Initializable: contract is already initialized"
         );
         _initialized = 1;
@@ -992,7 +1080,10 @@ abstract contract Initializable {
      * Emits an {Initialized} event.
      */
     modifier reinitializer(uint8 version) {
-        require(!_initializing && _initialized < version, "Initializable: contract is already initialized");
+        require(
+            !_initializing && _initialized < version,
+            "Initializable: contract is already initialized"
+        );
         _initialized = version;
         _initializing = true;
         _;
@@ -1125,20 +1216,21 @@ abstract contract ReentrancyGuardUpgradeable is Initializable {
  * @custom:oz-upgrades-unsafe-allow delegatecall
  */
 abstract contract ERC1967UpgradeUpgradeable is Initializable {
-    function __ERC1967Upgrade_init() internal onlyInitializing {
-    }
+    function __ERC1967Upgrade_init() internal onlyInitializing {}
 
-    function __ERC1967Upgrade_init_unchained() internal onlyInitializing {
-    }
+    function __ERC1967Upgrade_init_unchained() internal onlyInitializing {}
+
     // This is the keccak-256 hash of "eip1967.proxy.rollback" subtracted by 1
-    bytes32 private constant _ROLLBACK_SLOT = 0x4910fdfa16fed3260ed0e7147f7cc6da11a60208b5b9406d12a635614ffd9143;
+    bytes32 private constant _ROLLBACK_SLOT =
+        0x4910fdfa16fed3260ed0e7147f7cc6da11a60208b5b9406d12a635614ffd9143;
 
     /**
      * @dev Storage slot with the address of the current implementation.
      * This is the keccak-256 hash of "eip1967.proxy.implementation" subtracted by 1, and is
      * validated in the constructor.
      */
-    bytes32 internal constant _IMPLEMENTATION_SLOT = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
+    bytes32 internal constant _IMPLEMENTATION_SLOT =
+        0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
 
     /**
      * @dev Emitted when the implementation is upgraded.
@@ -1149,15 +1241,21 @@ abstract contract ERC1967UpgradeUpgradeable is Initializable {
      * @dev Returns the current implementation address.
      */
     function _getImplementation() internal view returns (address) {
-        return StorageSlotUpgradeable.getAddressSlot(_IMPLEMENTATION_SLOT).value;
+        return
+            StorageSlotUpgradeable.getAddressSlot(_IMPLEMENTATION_SLOT).value;
     }
 
     /**
      * @dev Stores a new address in the EIP1967 implementation slot.
      */
     function _setImplementation(address newImplementation) private {
-        require(AddressUpgradeable.isContract(newImplementation), "ERC1967: new implementation is not a contract");
-        StorageSlotUpgradeable.getAddressSlot(_IMPLEMENTATION_SLOT).value = newImplementation;
+        require(
+            AddressUpgradeable.isContract(newImplementation),
+            "ERC1967: new implementation is not a contract"
+        );
+        StorageSlotUpgradeable
+            .getAddressSlot(_IMPLEMENTATION_SLOT)
+            .value = newImplementation;
     }
 
     /**
@@ -1202,8 +1300,13 @@ abstract contract ERC1967UpgradeUpgradeable is Initializable {
         if (StorageSlotUpgradeable.getBooleanSlot(_ROLLBACK_SLOT).value) {
             _setImplementation(newImplementation);
         } else {
-            try IERC1822ProxiableUpgradeable(newImplementation).proxiableUUID() returns (bytes32 slot) {
-                require(slot == _IMPLEMENTATION_SLOT, "ERC1967Upgrade: unsupported proxiableUUID");
+            try
+                IERC1822ProxiableUpgradeable(newImplementation).proxiableUUID()
+            returns (bytes32 slot) {
+                require(
+                    slot == _IMPLEMENTATION_SLOT,
+                    "ERC1967Upgrade: unsupported proxiableUUID"
+                );
             } catch {
                 revert("ERC1967Upgrade: new implementation is not UUPS");
             }
@@ -1216,7 +1319,8 @@ abstract contract ERC1967UpgradeUpgradeable is Initializable {
      * This is the keccak-256 hash of "eip1967.proxy.admin" subtracted by 1, and is
      * validated in the constructor.
      */
-    bytes32 internal constant _ADMIN_SLOT = 0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103;
+    bytes32 internal constant _ADMIN_SLOT =
+        0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103;
 
     /**
      * @dev Emitted when the admin account has changed.
@@ -1234,7 +1338,10 @@ abstract contract ERC1967UpgradeUpgradeable is Initializable {
      * @dev Stores a new address in the EIP1967 admin slot.
      */
     function _setAdmin(address newAdmin) private {
-        require(newAdmin != address(0), "ERC1967: new admin is the zero address");
+        require(
+            newAdmin != address(0),
+            "ERC1967: new admin is the zero address"
+        );
         StorageSlotUpgradeable.getAddressSlot(_ADMIN_SLOT).value = newAdmin;
     }
 
@@ -1252,7 +1359,8 @@ abstract contract ERC1967UpgradeUpgradeable is Initializable {
      * @dev The storage slot of the UpgradeableBeacon contract which defines the implementation for this proxy.
      * This is bytes32(uint256(keccak256('eip1967.proxy.beacon')) - 1)) and is validated in the constructor.
      */
-    bytes32 internal constant _BEACON_SLOT = 0xa3f0ad74e5423aebfd80d3ef4346578335a9a72aeaee59ff6cb3582b35133d50;
+    bytes32 internal constant _BEACON_SLOT =
+        0xa3f0ad74e5423aebfd80d3ef4346578335a9a72aeaee59ff6cb3582b35133d50;
 
     /**
      * @dev Emitted when the beacon is upgraded.
@@ -1270,9 +1378,14 @@ abstract contract ERC1967UpgradeUpgradeable is Initializable {
      * @dev Stores a new beacon in the EIP1967 beacon slot.
      */
     function _setBeacon(address newBeacon) private {
-        require(AddressUpgradeable.isContract(newBeacon), "ERC1967: new beacon is not a contract");
         require(
-            AddressUpgradeable.isContract(IBeaconUpgradeable(newBeacon).implementation()),
+            AddressUpgradeable.isContract(newBeacon),
+            "ERC1967: new beacon is not a contract"
+        );
+        require(
+            AddressUpgradeable.isContract(
+                IBeaconUpgradeable(newBeacon).implementation()
+            ),
             "ERC1967: beacon implementation is not a contract"
         );
         StorageSlotUpgradeable.getAddressSlot(_BEACON_SLOT).value = newBeacon;
@@ -1292,7 +1405,10 @@ abstract contract ERC1967UpgradeUpgradeable is Initializable {
         _setBeacon(newBeacon);
         emit BeaconUpgraded(newBeacon);
         if (data.length > 0 || forceCall) {
-            _functionDelegateCall(IBeaconUpgradeable(newBeacon).implementation(), data);
+            _functionDelegateCall(
+                IBeaconUpgradeable(newBeacon).implementation(),
+                data
+            );
         }
     }
 
@@ -1302,12 +1418,23 @@ abstract contract ERC1967UpgradeUpgradeable is Initializable {
      *
      * _Available since v3.4._
      */
-    function _functionDelegateCall(address target, bytes memory data) private returns (bytes memory) {
-        require(AddressUpgradeable.isContract(target), "Address: delegate call to non-contract");
+    function _functionDelegateCall(
+        address target,
+        bytes memory data
+    ) private returns (bytes memory) {
+        require(
+            AddressUpgradeable.isContract(target),
+            "Address: delegate call to non-contract"
+        );
 
         // solhint-disable-next-line avoid-low-level-calls
         (bool success, bytes memory returndata) = target.delegatecall(data);
-        return AddressUpgradeable.verifyCallResult(success, returndata, "Address: low-level delegate call failed");
+        return
+            AddressUpgradeable.verifyCallResult(
+                success,
+                returndata,
+                "Address: low-level delegate call failed"
+            );
     }
 
     /**
@@ -1330,12 +1457,15 @@ abstract contract ERC1967UpgradeUpgradeable is Initializable {
  *
  * _Available since v4.1._
  */
-abstract contract UUPSUpgradeable is Initializable, IERC1822ProxiableUpgradeable, ERC1967UpgradeUpgradeable {
-    function __UUPSUpgradeable_init() internal onlyInitializing {
-    }
+abstract contract UUPSUpgradeable is
+    Initializable,
+    IERC1822ProxiableUpgradeable,
+    ERC1967UpgradeUpgradeable
+{
+    function __UUPSUpgradeable_init() internal onlyInitializing {}
 
-    function __UUPSUpgradeable_init_unchained() internal onlyInitializing {
-    }
+    function __UUPSUpgradeable_init_unchained() internal onlyInitializing {}
+
     /// @custom:oz-upgrades-unsafe-allow state-variable-immutable state-variable-assignment
     address private immutable __self = address(this);
 
@@ -1347,8 +1477,14 @@ abstract contract UUPSUpgradeable is Initializable, IERC1822ProxiableUpgradeable
      * fail.
      */
     modifier onlyProxy() {
-        require(address(this) != __self, "Function must be called through delegatecall");
-        require(_getImplementation() == __self, "Function must be called through active proxy");
+        require(
+            address(this) != __self,
+            "Function must be called through delegatecall"
+        );
+        require(
+            _getImplementation() == __self,
+            "Function must be called through active proxy"
+        );
         _;
     }
 
@@ -1357,7 +1493,10 @@ abstract contract UUPSUpgradeable is Initializable, IERC1822ProxiableUpgradeable
      * callable on the implementing contract but not through proxies.
      */
     modifier notDelegated() {
-        require(address(this) == __self, "UUPSUpgradeable: must not be called through delegatecall");
+        require(
+            address(this) == __self,
+            "UUPSUpgradeable: must not be called through delegatecall"
+        );
         _;
     }
 
@@ -1369,7 +1508,14 @@ abstract contract UUPSUpgradeable is Initializable, IERC1822ProxiableUpgradeable
      * bricking a proxy that upgrades to it, by delegating to itself until out of gas. Thus it is critical that this
      * function revert if invoked through a proxy. This is guaranteed by the `notDelegated` modifier.
      */
-    function proxiableUUID() external view virtual override notDelegated returns (bytes32) {
+    function proxiableUUID()
+        external
+        view
+        virtual
+        override
+        notDelegated
+        returns (bytes32)
+    {
         return _IMPLEMENTATION_SLOT;
     }
 
@@ -1393,7 +1539,10 @@ abstract contract UUPSUpgradeable is Initializable, IERC1822ProxiableUpgradeable
      *
      * Emits an {Upgraded} event.
      */
-    function upgradeToAndCall(address newImplementation, bytes memory data) external payable virtual onlyProxy {
+    function upgradeToAndCall(
+        address newImplementation,
+        bytes memory data
+    ) external payable virtual onlyProxy {
         _authorizeUpgrade(newImplementation);
         _upgradeToAndCallUUPS(newImplementation, data, true);
     }
@@ -1429,11 +1578,10 @@ abstract contract UUPSUpgradeable is Initializable, IERC1822ProxiableUpgradeable
  * This contract is only required for intermediate, library-like contracts.
  */
 abstract contract ContextUpgradeable is Initializable {
-    function __Context_init() internal onlyInitializing {
-    }
+    function __Context_init() internal onlyInitializing {}
 
-    function __Context_init_unchained() internal onlyInitializing {
-    }
+    function __Context_init_unchained() internal onlyInitializing {}
+
     function _msgSender() internal view virtual returns (address) {
         return msg.sender;
     }
@@ -1465,7 +1613,10 @@ abstract contract ContextUpgradeable is Initializable {
 abstract contract OwnableUpgradeable is Initializable, ContextUpgradeable {
     address private _owner;
 
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    event OwnershipTransferred(
+        address indexed previousOwner,
+        address indexed newOwner
+    );
 
     /**
      * @dev Initializes the contract setting the deployer as the initial owner.
@@ -1516,7 +1667,10 @@ abstract contract OwnableUpgradeable is Initializable, ContextUpgradeable {
      * Can only be called by the current owner.
      */
     function transferOwnership(address newOwner) public virtual onlyOwner {
-        require(newOwner != address(0), "Ownable: new owner is the zero address");
+        require(
+            newOwner != address(0),
+            "Ownable: new owner is the zero address"
+        );
         _transferOwnership(newOwner);
     }
 
@@ -1574,15 +1728,16 @@ interface IERC165Upgradeable {
  * Alternatively, {ERC165Storage} provides an easier to use but more expensive implementation.
  */
 abstract contract ERC165Upgradeable is Initializable, IERC165Upgradeable {
-    function __ERC165_init() internal onlyInitializing {
-    }
+    function __ERC165_init() internal onlyInitializing {}
 
-    function __ERC165_init_unchained() internal onlyInitializing {
-    }
+    function __ERC165_init_unchained() internal onlyInitializing {}
+
     /**
      * @dev See {IERC165-supportsInterface}.
      */
-    function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view virtual override returns (bool) {
         return interfaceId == type(IERC165Upgradeable).interfaceId;
     }
 
@@ -1592,6 +1747,70 @@ abstract contract ERC165Upgradeable is Initializable, IERC165Upgradeable {
      * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
      */
     uint256[50] private __gap;
+}
+
+interface IERC721Upgradeable is IERC165Upgradeable {
+    /**
+     * @dev Emitted when `tokenId` token is transferred from `from` to `to`.
+     */
+    event Transfer(
+        address indexed from,
+        address indexed to,
+        uint256 indexed tokenId
+    );
+
+    /**
+     * @dev Emitted when `owner` enables `approved` to manage the `tokenId` token.
+     */
+    event Approval(
+        address indexed owner,
+        address indexed approved,
+        uint256 indexed tokenId
+    );
+
+    /**
+     * @dev Emitted when `owner` enables or disables (`approved`) `operator` to manage all of its assets.
+     */
+    event ApprovalForAll(
+        address indexed owner,
+        address indexed operator,
+        bool approved
+    );
+
+    /**
+     * @dev Returns the number of tokens in ``owner``'s account.
+     */
+    function balanceOf(address owner) external view returns (uint256 balance);
+
+    function ownerOf(uint256 tokenId) external view returns (address owner);
+
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId,
+        bytes calldata data
+    ) external;
+
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) external;
+
+    function transferFrom(address from, address to, uint256 tokenId) external;
+
+    function approve(address to, uint256 tokenId) external;
+
+    function setApprovalForAll(address operator, bool _approved) external;
+
+    function getApproved(
+        uint256 tokenId
+    ) external view returns (address operator);
+
+    function isApprovedForAll(
+        address owner,
+        address operator
+    ) external view returns (bool);
 }
 
 /**
@@ -1656,7 +1875,13 @@ interface IERC1155Upgradeable is IERC165Upgradeable {
     /**
      * @dev Emitted when `value` tokens of token type `id` are transferred from `from` to `to` by `operator`.
      */
-    event TransferSingle(address indexed operator, address indexed from, address indexed to, uint256 id, uint256 value);
+    event TransferSingle(
+        address indexed operator,
+        address indexed from,
+        address indexed to,
+        uint256 id,
+        uint256 value
+    );
 
     /**
      * @dev Equivalent to multiple {TransferSingle} events, where `operator`, `from` and `to` are the same for all
@@ -1674,7 +1899,11 @@ interface IERC1155Upgradeable is IERC165Upgradeable {
      * @dev Emitted when `account` grants or revokes permission to `operator` to transfer their tokens, according to
      * `approved`.
      */
-    event ApprovalForAll(address indexed account, address indexed operator, bool approved);
+    event ApprovalForAll(
+        address indexed account,
+        address indexed operator,
+        bool approved
+    );
 
     /**
      * @dev Emitted when the URI for token type `id` changes to `value`, if it is a non-programmatic URI.
@@ -1692,7 +1921,10 @@ interface IERC1155Upgradeable is IERC165Upgradeable {
      *
      * - `account` cannot be the zero address.
      */
-    function balanceOf(address account, uint256 id) external view returns (uint256);
+    function balanceOf(
+        address account,
+        uint256 id
+    ) external view returns (uint256);
 
     /**
      * @dev xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {balanceOf}.
@@ -1701,10 +1933,10 @@ interface IERC1155Upgradeable is IERC165Upgradeable {
      *
      * - `accounts` and `ids` must have the same length.
      */
-    function balanceOfBatch(address[] calldata accounts, uint256[] calldata ids)
-        external
-        view
-        returns (uint256[] memory);
+    function balanceOfBatch(
+        address[] calldata accounts,
+        uint256[] calldata ids
+    ) external view returns (uint256[] memory);
 
     /**
      * @dev Grants or revokes permission to `operator` to transfer the caller's tokens, according to `approved`,
@@ -1722,7 +1954,10 @@ interface IERC1155Upgradeable is IERC165Upgradeable {
      *
      * See {setApprovalForAll}.
      */
-    function isApprovedForAll(address account, address operator) external view returns (bool);
+    function isApprovedForAll(
+        address account,
+        address operator
+    ) external view returns (bool);
 
     /**
      * @dev Transfers `amount` tokens of token type `id` from `from` to `to`.
@@ -1788,7 +2023,13 @@ interface IERC1155MetadataURIUpgradeable is IERC1155Upgradeable {
  *
  * _Available since v3.1._
  */
-contract ERC1155Upgradeable is Initializable, ContextUpgradeable, ERC165Upgradeable, IERC1155Upgradeable, IERC1155MetadataURIUpgradeable {
+contract ERC1155Upgradeable is
+    Initializable,
+    ContextUpgradeable,
+    ERC165Upgradeable,
+    IERC1155Upgradeable,
+    IERC1155MetadataURIUpgradeable
+{
     using AddressUpgradeable for address;
 
     // Mapping from token ID to account balances
@@ -1807,14 +2048,24 @@ contract ERC1155Upgradeable is Initializable, ContextUpgradeable, ERC165Upgradea
         __ERC1155_init_unchained(uri_);
     }
 
-    function __ERC1155_init_unchained(string memory uri_) internal onlyInitializing {
+    function __ERC1155_init_unchained(
+        string memory uri_
+    ) internal onlyInitializing {
         _setURI(uri_);
     }
 
     /**
      * @dev See {IERC165-supportsInterface}.
      */
-    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165Upgradeable, IERC165Upgradeable) returns (bool) {
+    function supportsInterface(
+        bytes4 interfaceId
+    )
+        public
+        view
+        virtual
+        override(ERC165Upgradeable, IERC165Upgradeable)
+        returns (bool)
+    {
         return
             interfaceId == type(IERC1155Upgradeable).interfaceId ||
             interfaceId == type(IERC1155MetadataURIUpgradeable).interfaceId ||
@@ -1842,8 +2093,14 @@ contract ERC1155Upgradeable is Initializable, ContextUpgradeable, ERC165Upgradea
      *
      * - `account` cannot be the zero address.
      */
-    function balanceOf(address account, uint256 id) public view virtual override returns (uint256) {
-        require(account != address(0), "ERC1155: address zero is not a valid owner");
+    function balanceOf(
+        address account,
+        uint256 id
+    ) public view virtual override returns (uint256) {
+        require(
+            account != address(0),
+            "ERC1155: address zero is not a valid owner"
+        );
         return _balances[id][account];
     }
 
@@ -1854,14 +2111,14 @@ contract ERC1155Upgradeable is Initializable, ContextUpgradeable, ERC165Upgradea
      *
      * - `accounts` and `ids` must have the same length.
      */
-    function balanceOfBatch(address[] memory accounts, uint256[] memory ids)
-        public
-        view
-        virtual
-        override
-        returns (uint256[] memory)
-    {
-        require(accounts.length == ids.length, "ERC1155: accounts and ids length mismatch");
+    function balanceOfBatch(
+        address[] memory accounts,
+        uint256[] memory ids
+    ) public view virtual override returns (uint256[] memory) {
+        require(
+            accounts.length == ids.length,
+            "ERC1155: accounts and ids length mismatch"
+        );
 
         uint256[] memory batchBalances = new uint256[](accounts.length);
 
@@ -1875,14 +2132,20 @@ contract ERC1155Upgradeable is Initializable, ContextUpgradeable, ERC165Upgradea
     /**
      * @dev See {IERC1155-setApprovalForAll}.
      */
-    function setApprovalForAll(address operator, bool approved) public virtual override {
+    function setApprovalForAll(
+        address operator,
+        bool approved
+    ) public virtual override {
         _setApprovalForAll(_msgSender(), operator, approved);
     }
 
     /**
      * @dev See {IERC1155-isApprovedForAll}.
      */
-    function isApprovedForAll(address account, address operator) public view virtual override returns (bool) {
+    function isApprovedForAll(
+        address account,
+        address operator
+    ) public view virtual override returns (bool) {
         return _operatorApprovals[account][operator];
     }
 
@@ -1948,7 +2211,10 @@ contract ERC1155Upgradeable is Initializable, ContextUpgradeable, ERC165Upgradea
         _beforeTokenTransfer(operator, from, to, ids, amounts, data);
 
         uint256 fromBalance = _balances[id][from];
-        require(fromBalance >= amount, "ERC1155: insufficient balance for transfer");
+        require(
+            fromBalance >= amount,
+            "ERC1155: insufficient balance for transfer"
+        );
         unchecked {
             _balances[id][from] = fromBalance - amount;
         }
@@ -1978,7 +2244,10 @@ contract ERC1155Upgradeable is Initializable, ContextUpgradeable, ERC165Upgradea
         uint256[] memory amounts,
         bytes memory data
     ) internal virtual {
-        require(ids.length == amounts.length, "ERC1155: ids and amounts length mismatch");
+        require(
+            ids.length == amounts.length,
+            "ERC1155: ids and amounts length mismatch"
+        );
         require(to != address(0), "ERC1155: transfer to the zero address");
 
         address operator = _msgSender();
@@ -1990,7 +2259,10 @@ contract ERC1155Upgradeable is Initializable, ContextUpgradeable, ERC165Upgradea
             uint256 amount = amounts[i];
 
             uint256 fromBalance = _balances[id][from];
-            require(fromBalance >= amount, "ERC1155: insufficient balance for transfer");
+            require(
+                fromBalance >= amount,
+                "ERC1155: insufficient balance for transfer"
+            );
             unchecked {
                 _balances[id][from] = fromBalance - amount;
             }
@@ -2001,7 +2273,14 @@ contract ERC1155Upgradeable is Initializable, ContextUpgradeable, ERC165Upgradea
 
         _afterTokenTransfer(operator, from, to, ids, amounts, data);
 
-        _doSafeBatchTransferAcceptanceCheck(operator, from, to, ids, amounts, data);
+        _doSafeBatchTransferAcceptanceCheck(
+            operator,
+            from,
+            to,
+            ids,
+            amounts,
+            data
+        );
     }
 
     /**
@@ -2057,7 +2336,14 @@ contract ERC1155Upgradeable is Initializable, ContextUpgradeable, ERC165Upgradea
 
         _afterTokenTransfer(operator, address(0), to, ids, amounts, data);
 
-        _doSafeTransferAcceptanceCheck(operator, address(0), to, id, amount, data);
+        _doSafeTransferAcceptanceCheck(
+            operator,
+            address(0),
+            to,
+            id,
+            amount,
+            data
+        );
     }
 
     /**
@@ -2078,7 +2364,10 @@ contract ERC1155Upgradeable is Initializable, ContextUpgradeable, ERC165Upgradea
         bytes memory data
     ) internal virtual {
         require(to != address(0), "ERC1155: mint to the zero address");
-        require(ids.length == amounts.length, "ERC1155: ids and amounts length mismatch");
+        require(
+            ids.length == amounts.length,
+            "ERC1155: ids and amounts length mismatch"
+        );
 
         address operator = _msgSender();
 
@@ -2092,7 +2381,14 @@ contract ERC1155Upgradeable is Initializable, ContextUpgradeable, ERC165Upgradea
 
         _afterTokenTransfer(operator, address(0), to, ids, amounts, data);
 
-        _doSafeBatchTransferAcceptanceCheck(operator, address(0), to, ids, amounts, data);
+        _doSafeBatchTransferAcceptanceCheck(
+            operator,
+            address(0),
+            to,
+            ids,
+            amounts,
+            data
+        );
     }
 
     /**
@@ -2105,11 +2401,7 @@ contract ERC1155Upgradeable is Initializable, ContextUpgradeable, ERC165Upgradea
      * - `from` cannot be the zero address.
      * - `from` must have at least `amount` tokens of token type `id`.
      */
-    function _burn(
-        address from,
-        uint256 id,
-        uint256 amount
-    ) internal virtual {
+    function _burn(address from, uint256 id, uint256 amount) internal virtual {
         require(from != address(0), "ERC1155: burn from the zero address");
 
         address operator = _msgSender();
@@ -2144,7 +2436,10 @@ contract ERC1155Upgradeable is Initializable, ContextUpgradeable, ERC165Upgradea
         uint256[] memory amounts
     ) internal virtual {
         require(from != address(0), "ERC1155: burn from the zero address");
-        require(ids.length == amounts.length, "ERC1155: ids and amounts length mismatch");
+        require(
+            ids.length == amounts.length,
+            "ERC1155: ids and amounts length mismatch"
+        );
 
         address operator = _msgSender();
 
@@ -2155,7 +2450,10 @@ contract ERC1155Upgradeable is Initializable, ContextUpgradeable, ERC165Upgradea
             uint256 amount = amounts[i];
 
             uint256 fromBalance = _balances[id][from];
-            require(fromBalance >= amount, "ERC1155: burn amount exceeds balance");
+            require(
+                fromBalance >= amount,
+                "ERC1155: burn amount exceeds balance"
+            );
             unchecked {
                 _balances[id][from] = fromBalance - amount;
             }
@@ -2248,8 +2546,19 @@ contract ERC1155Upgradeable is Initializable, ContextUpgradeable, ERC165Upgradea
         bytes memory data
     ) private {
         if (to.isContract()) {
-            try IERC1155ReceiverUpgradeable(to).onERC1155Received(operator, from, id, amount, data) returns (bytes4 response) {
-                if (response != IERC1155ReceiverUpgradeable.onERC1155Received.selector) {
+            try
+                IERC1155ReceiverUpgradeable(to).onERC1155Received(
+                    operator,
+                    from,
+                    id,
+                    amount,
+                    data
+                )
+            returns (bytes4 response) {
+                if (
+                    response !=
+                    IERC1155ReceiverUpgradeable.onERC1155Received.selector
+                ) {
                     revert("ERC1155: ERC1155Receiver rejected tokens");
                 }
             } catch Error(string memory reason) {
@@ -2269,10 +2578,19 @@ contract ERC1155Upgradeable is Initializable, ContextUpgradeable, ERC165Upgradea
         bytes memory data
     ) private {
         if (to.isContract()) {
-            try IERC1155ReceiverUpgradeable(to).onERC1155BatchReceived(operator, from, ids, amounts, data) returns (
-                bytes4 response
-            ) {
-                if (response != IERC1155ReceiverUpgradeable.onERC1155BatchReceived.selector) {
+            try
+                IERC1155ReceiverUpgradeable(to).onERC1155BatchReceived(
+                    operator,
+                    from,
+                    ids,
+                    amounts,
+                    data
+                )
+            returns (bytes4 response) {
+                if (
+                    response !=
+                    IERC1155ReceiverUpgradeable.onERC1155BatchReceived.selector
+                ) {
                     revert("ERC1155: ERC1155Receiver rejected tokens");
                 }
             } catch Error(string memory reason) {
@@ -2283,7 +2601,9 @@ contract ERC1155Upgradeable is Initializable, ContextUpgradeable, ERC165Upgradea
         }
     }
 
-    function _asSingletonArray(uint256 element) private pure returns (uint256[] memory) {
+    function _asSingletonArray(
+        uint256 element
+    ) private pure returns (uint256[] memory) {
         uint256[] memory array = new uint256[](1);
         array[0] = element;
 
@@ -2306,12 +2626,14 @@ contract ERC1155Upgradeable is Initializable, ContextUpgradeable, ERC165Upgradea
  * corresponding is an NFT, there is no guarantees that no other token with the
  * same id are not going to be minted.
  */
-abstract contract ERC1155SupplyUpgradeable is Initializable, ERC1155Upgradeable {
-    function __ERC1155Supply_init() internal onlyInitializing {
-    }
+abstract contract ERC1155SupplyUpgradeable is
+    Initializable,
+    ERC1155Upgradeable
+{
+    function __ERC1155Supply_init() internal onlyInitializing {}
 
-    function __ERC1155Supply_init_unchained() internal onlyInitializing {
-    }
+    function __ERC1155Supply_init_unchained() internal onlyInitializing {}
+
     mapping(uint256 => uint256) private _totalSupply;
 
     /**
@@ -2352,7 +2674,10 @@ abstract contract ERC1155SupplyUpgradeable is Initializable, ERC1155Upgradeable 
                 uint256 id = ids[i];
                 uint256 amount = amounts[i];
                 uint256 supply = _totalSupply[id];
-                require(supply >= amount, "ERC1155: burn amount exceeds totalSupply");
+                require(
+                    supply >= amount,
+                    "ERC1155: burn amount exceeds totalSupply"
+                );
                 unchecked {
                     _totalSupply[id] = supply - amount;
                 }
@@ -2376,6 +2701,7 @@ error IllegalCaller();
 error IllegalParameter();
 error MintPriceNotPaid();
 error WithdrawTransfer();
+error SelfBind();
 
 contract MemePigeonNFT is
     Initializable,
@@ -2418,6 +2744,8 @@ contract MemePigeonNFT is
 
     mapping(uint256 => Pigeon) public pigeons;
     mapping(address => address) public partners;
+    address public linkageNft;
+    uint256 public discount;
 
     event BindingPartner(address indexed customer, address indexed partner);
     event ShareReward(
@@ -2434,6 +2762,7 @@ contract MemePigeonNFT is
     );
     event UpdateAbility(uint256 indexed id, uint256 efficiency, uint256 caps);
     event RevokeToken(address receipt, address token, uint256 amount);
+    event SetLinkageNft(address linkage, uint256 discount);
 
     modifier onlyHatchingNest() {
         if (!startHatching || hatchingNest == address(0)) {
@@ -2503,10 +2832,32 @@ contract MemePigeonNFT is
             cap: 1
         });
 
+        // todo change time&rate before launch
         promotionStartTime = block.timestamp + 1 days;
         promotionDuration = 4 days;
         promotionInterval = 1 days;
         partnerMintReward = 15e2; // 15%
+
+        linkageNft = 0x2723522702093601e6360CAe665518C4f63e9dA6; // CyberConnect Profile
+        discount = 4e2; // 4%
+        uint256[] memory teamRreservedId = new uint256[](4);
+        teamRreservedId[0] = 1;
+        teamRreservedId[1] = 2;
+        teamRreservedId[2] = 3;
+        teamRreservedId[3] = 4;
+
+        uint256[] memory teamRreservedAmount = new uint256[](4);
+        teamRreservedAmount[0] = 10;
+        teamRreservedAmount[1] = 20;
+        teamRreservedAmount[2] = 100;
+        teamRreservedAmount[3] = 200;
+
+        _mintBatch(
+            owner(),
+            teamRreservedId,
+            teamRreservedAmount,
+            "team reserved"
+        );
     }
 
     function mint(
@@ -2521,7 +2872,6 @@ contract MemePigeonNFT is
         if (totalSupply(id) + amount > getMaxPigeon(id)) {
             revert MaxSupply();
         }
-
         if (
             pigeons[id].limit > 0 &&
             balanceOf(account, id) + amount > pigeons[id].limit
@@ -2539,7 +2889,10 @@ contract MemePigeonNFT is
             if (currentPartner != address(0)) {
                 revert ExistPartner();
             }
-            if (id <= 4 || tx.origin == account) {
+            if (newPartner == tx.origin || newPartner == msg.sender) {
+                revert SelfBind();
+            }
+            if (tx.origin == account) {
                 partners[account] = newPartner;
                 currentPartner = newPartner;
                 emit BindingPartner(account, newPartner);
@@ -2558,7 +2911,7 @@ contract MemePigeonNFT is
         _mint(account, id, amount, "");
     }
 
-    // eggs change
+    // Hatching pigeon from eggs
     function doHatching(
         address account,
         uint256[] memory ids,
@@ -2571,10 +2924,6 @@ contract MemePigeonNFT is
             if (ids[i] < 1 || ids[i] > 5) {
                 revert IllegalParameter();
             }
-
-            if (totalSupply(ids[i]) + amounts[i] > getMaxPigeon(ids[i])) {
-                revert MaxSupply();
-            }
         }
 
         _mintBatch(account, ids, amounts, new bytes(0));
@@ -2582,6 +2931,12 @@ contract MemePigeonNFT is
     }
 
     function bindPartner(address newPartner) public {
+        if (partners[msg.sender] != address(0)) {
+            revert ExistPartner();
+        }
+        if (newPartner == tx.origin || newPartner == msg.sender) {
+            revert SelfBind();
+        }
         partners[msg.sender] = newPartner;
         emit BindingPartner(msg.sender, newPartner);
     }
@@ -2643,6 +2998,15 @@ contract MemePigeonNFT is
         super._setURI(newuri);
     }
 
+    function setLinkageNft(
+        address newLinkage,
+        uint256 newDiscount
+    ) external onlyOwner {
+        linkageNft = newLinkage;
+        discount = newDiscount;
+        emit SetLinkageNft(newLinkage, newDiscount);
+    }
+
     function withdrawPayments(address payable payee) external onlyOwner {
         uint256 balance = address(this).balance;
         (bool transferTx, ) = payee.call{value: balance}(new bytes(0));
@@ -2692,16 +3056,22 @@ contract MemePigeonNFT is
             );
     }
 
-    function getMintPrice(uint256 id) public view returns (uint256) {
+    function getMintPrice(uint256 id) public view returns (uint256 mintPrice) {
         if (current() < promotionStartTime) {
-            return pigeons[id].promotionalPrice;
+            mintPrice = pigeons[id].promotionalPrice;
         } else if (current() - promotionStartTime >= promotionDuration) {
-            return pigeons[id].mintPrice;
+            mintPrice = pigeons[id].mintPrice;
         } else {
             uint256 steps = (current() - promotionStartTime) /
                 promotionInterval;
-            return
-                pigeons[id].promotionalPrice + (steps * getPromotionUpStep(id));
+            mintPrice =
+                pigeons[id].promotionalPrice +
+                (steps * getPromotionUpStep(id));
+        }
+        if (msg.sender != address(0) && linkageNft != address(0)) {
+            if (IERC721Upgradeable(linkageNft).balanceOf(msg.sender) > 0) {
+                mintPrice = mintPrice - (mintPrice.percentMul(discount));
+            }
         }
     }
 
@@ -2721,13 +3091,11 @@ contract MemePigeonNFT is
             cap += captemp;
             i++;
         }
-        if (
-            efficiency == 0 &&
-            cap == 0 &&
-            balanceOf(target, uint256(Rarity.Ordinary)) >= 1
-        ) {
-            efficiency = 1;
-            cap = 1;
+        if (balanceOf(target, uint256(Rarity.Ordinary)) >= 1) {
+            cap += 100;
+            if (efficiency == 0) {
+                efficiency = 1;
+            }
         }
     }
 

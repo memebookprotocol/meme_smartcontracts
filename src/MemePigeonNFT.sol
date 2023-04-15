@@ -1,28 +1,28 @@
 /**                                
-                                  :^~!77!^:                           
-                               ^?J?!~^^^^!7??^                        
-                             .JJ^      .~!!~~?Y^.~???.                
-                            .P!       75~^~7J7:5G!: YY.:^.            
-                           .5J       .B^:G#Y:YJ ?Y:~5P?7!P!           
-                          .G@^ .!?7:  57.B@@Y.B~.GY!:    G7           
-                          ^#B^ :BBGG. .57:YP!.G~.:     .57            
-                          .BB7  7PY!   .?Y7~!Y?       ^P!:!.          
-                           J#G   ..      .^~^.       ~B5JJB! ^75^     
-                            !B7                   .:^Y#?!~PPYYJ#:     
-                             :B:                  .!!!?7!!!7!!G!      
-                              75             ^~~~~~!!!!!!!!~7G!       
-                               JJ       ... ^!!!!!!!!!!!!!!YP^        
-                                Y?     ~!!!~!!!!!!!!!!!!!JP?.         
-                                 JJ:::^!!!!!!!!!!!!!!!7J5?:           
-                                  !5J!!!!!!!!!!!!!7?YY?~.             
-                                   .JYJ??77777??YYY#J                 
-                                     .^~7????JGY::?PP                 
-                                            .7PY   !:                 
-                                              :.       
-                        website: https://www.memebook.xyz/home
-                        twitter: https://twitter.com/memebook_xyz
-                        whitepapper_en: https://whitepaper.memebook.xyz/en/
-                        whitepapper_zh: https://whitepaper.memebook.xyz/zh/
+                             :^~!77!^:                           
+                          ^?J?!~^^^^!7??^                        
+                        .JJ^      .~!!~~?Y^.~???.                
+                       .P!       75~^~7J7:5G!: YY.:^.            
+                      .5J       .B^:G#Y:YJ ?Y:~5P?7!P!           
+                     .G@^ .!?7:  57.B@@Y.B~.GY!:    G7           
+                     ^#B^ :BBGG. .57:YP!.G~.:     .57            
+                     .BB7  7PY!   .?Y7~!Y?       ^P!:!.          
+                      J#G   ..      .^~^.       ~B5JJB! ^75^     
+                       !B7                   .:^Y#?!~PPYYJ#:     
+                        :B:                  .!!!?7!!!7!!G!      
+                         75             ^~~~~~!!!!!!!!~7G!       
+                          JJ       ... ^!!!!!!!!!!!!!!YP^        
+                           Y?     ~!!!~!!!!!!!!!!!!!JP?.         
+                            JJ:::^!!!!!!!!!!!!!!!7J5?:           
+                             !5J!!!!!!!!!!!!!7?YY?~.             
+                              .JYJ??77777??YYY#J                 
+                                .^~7????JGY::?PP                 
+                                       .7PY   !:                 
+                                         :.       
+                   website: https://www.memebook.xyz/home
+                   twitter: https://twitter.com/memebook_xyz
+                   whitepapper_en: https://whitepaper.memebook.xyz/en/
+                   whitepapper_zh: https://whitepaper.memebook.xyz/zh/
  */
 
 // SPDX-License-Identifier: MIT
@@ -30,13 +30,13 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155SupplyUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol";
-
 import "./PercentageMath.sol";
 
 error MaxSupply();
@@ -47,6 +47,7 @@ error IllegalCaller();
 error IllegalParameter();
 error MintPriceNotPaid();
 error WithdrawTransfer();
+error SelfBind();
 
 contract MemePigeonNFT is
     Initializable,
@@ -86,6 +87,8 @@ contract MemePigeonNFT is
     address public feeto;
     address public hatchingNest;
     bool public startHatching;
+    address public linkageNft;
+    uint256 public discount;
 
     mapping(uint256 => Pigeon) public pigeons;
     mapping(address => address) public partners;
@@ -105,6 +108,7 @@ contract MemePigeonNFT is
     );
     event UpdateAbility(uint256 indexed id, uint256 efficiency, uint256 caps);
     event RevokeToken(address receipt, address token, uint256 amount);
+    event SetLinkageNft(address linkage, uint256 discount);
 
     modifier onlyHatchingNest() {
         if (!startHatching || hatchingNest == address(0)) {
@@ -174,11 +178,32 @@ contract MemePigeonNFT is
             cap: 1
         });
 
-        // todo modify before produce
+        // todo change time&rate before launch
         promotionStartTime = block.timestamp + 1 days;
         promotionDuration = 4 days;
         promotionInterval = 1 days;
         partnerMintReward = 15e2; // 15%
+
+        linkageNft = 0x2723522702093601e6360CAe665518C4f63e9dA6; // CyberConnect Profile
+        discount = 4e2; // 4%
+        uint256[] memory teamRreservedId = new uint256[](4);
+        teamRreservedId[0] = 1;
+        teamRreservedId[1] = 2;
+        teamRreservedId[2] = 3;
+        teamRreservedId[3] = 4;
+
+        uint256[] memory teamRreservedAmount = new uint256[](4);
+        teamRreservedAmount[0] = 10;
+        teamRreservedAmount[1] = 20;
+        teamRreservedAmount[2] = 100;
+        teamRreservedAmount[3] = 200;
+
+        _mintBatch(
+            owner(),
+            teamRreservedId,
+            teamRreservedAmount,
+            "team reserved"
+        );
     }
 
     function mint(
@@ -193,7 +218,6 @@ contract MemePigeonNFT is
         if (totalSupply(id) + amount > getMaxPigeon(id)) {
             revert MaxSupply();
         }
-
         if (
             pigeons[id].limit > 0 &&
             balanceOf(account, id) + amount > pigeons[id].limit
@@ -211,8 +235,10 @@ contract MemePigeonNFT is
             if (currentPartner != address(0)) {
                 revert ExistPartner();
             }
-            // todo this will give partner to msg.sender
-            if (id <= 4 || tx.origin == account) {
+            if (newPartner == tx.origin || newPartner == msg.sender) {
+                revert SelfBind();
+            }
+            if (tx.origin == account) {
                 partners[account] = newPartner;
                 currentPartner = newPartner;
                 emit BindingPartner(account, newPartner);
@@ -231,7 +257,7 @@ contract MemePigeonNFT is
         _mint(account, id, amount, "");
     }
 
-    // eggs change
+    // Hatching pigeon from eggs
     function doHatching(
         address account,
         uint256[] memory ids,
@@ -244,19 +270,19 @@ contract MemePigeonNFT is
             if (ids[i] < 1 || ids[i] > 5) {
                 revert IllegalParameter();
             }
-
-            // todo maybe no need
-            if (totalSupply(ids[i]) + amounts[i] > getMaxPigeon(ids[i])) {
-                revert MaxSupply();
-            }
         }
 
         _mintBatch(account, ids, amounts, new bytes(0));
         return true;
     }
 
-    // todo private befroe product
     function bindPartner(address newPartner) public {
+        if (partners[msg.sender] != address(0)) {
+            revert ExistPartner();
+        }
+        if (newPartner == tx.origin || newPartner == msg.sender) {
+            revert SelfBind();
+        }
         partners[msg.sender] = newPartner;
         emit BindingPartner(msg.sender, newPartner);
     }
@@ -318,6 +344,15 @@ contract MemePigeonNFT is
         super._setURI(newuri);
     }
 
+    function setLinkageNft(
+        address newLinkage,
+        uint256 newDiscount
+    ) external onlyOwner {
+        linkageNft = newLinkage;
+        discount = newDiscount;
+        emit SetLinkageNft(newLinkage, newDiscount);
+    }
+
     function withdrawPayments(address payable payee) external onlyOwner {
         uint256 balance = address(this).balance;
         (bool transferTx, ) = payee.call{value: balance}(new bytes(0));
@@ -367,16 +402,22 @@ contract MemePigeonNFT is
             );
     }
 
-    function getMintPrice(uint256 id) public view returns (uint256) {
+    function getMintPrice(uint256 id) public view returns (uint256 mintPrice) {
         if (current() < promotionStartTime) {
-            return pigeons[id].promotionalPrice;
+            mintPrice = pigeons[id].promotionalPrice;
         } else if (current() - promotionStartTime >= promotionDuration) {
-            return pigeons[id].mintPrice;
+            mintPrice = pigeons[id].mintPrice;
         } else {
             uint256 steps = (current() - promotionStartTime) /
                 promotionInterval;
-            return
-                pigeons[id].promotionalPrice + (steps * getPromotionUpStep(id));
+            mintPrice =
+                pigeons[id].promotionalPrice +
+                (steps * getPromotionUpStep(id));
+        }
+        if (msg.sender != address(0) && linkageNft != address(0)) {
+            if (IERC721Upgradeable(linkageNft).balanceOf(msg.sender) > 0) {
+                mintPrice = mintPrice - (mintPrice.percentMul(discount));
+            }
         }
     }
 
@@ -396,13 +437,11 @@ contract MemePigeonNFT is
             cap += captemp;
             i++;
         }
-        if (
-            efficiency == 0 &&
-            cap == 0 &&
-            balanceOf(target, uint256(Rarity.Ordinary)) >= 1
-        ) {
-            efficiency = 1;
-            cap = 1;
+        if (balanceOf(target, uint256(Rarity.Ordinary)) >= 1) {
+            cap += 100;
+            if (efficiency == 0) {
+                efficiency = 1;
+            }
         }
     }
 
